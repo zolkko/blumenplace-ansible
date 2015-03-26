@@ -1,0 +1,10 @@
+---
+source_dir: /tmp/blumenplace-site
+build_dir: /tmp/blumenplace-site/build/
+site_domain: blumenplace.io
+site_root: /var/www-data
+nginx_user: root
+nginx_group: root
+web_user: www-data
+web_group: root
+

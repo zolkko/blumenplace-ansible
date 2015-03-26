@@ -1,0 +1,22 @@
+---
+#
+# these tasks provisions web server
+#
+- name: install nginx package
+  apt: pkg=nginx state=installed update-cache=yes
+  notify: restart nginx
+
+- name: copy nginx configuration
+  template: src=files/nginx/default.conf dest=/etc/nginx/sites-available/default owner={{ nginx_user }} group={{ nginx_group }} mode="u=rw,g=r,o=r"
+
+- name: make default nginx configuration available
+  file: state=link path=/etc/nginx/sites-enabled/default src=/etc/nginx/sites-available/default owner={{ nginx_user }} group={{ nginx_group }} mode="u=rw,g=rw,o=rw"
+
+- name: create site root
+  file: state=directory path={{ site_root }} owner={{ web_user }} group={{ web_group }}
+  notify: reload nginx
+
+- name: rsync files
+  synchronize: delete=yes recursive=yes checksum=yes dest="{{ site_root }}" src="{{ build_dir }}"
+  delegate_to: "{{ groups['buildservers'] | random }}"
+

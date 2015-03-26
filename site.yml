@@ -1,0 +1,14 @@
+---
+#
+# This playbook provisions and deploys the web-site
+#
+- hosts: buildservers
+  roles:
+  - common
+  - webtier_builder
+
+- hosts: webservers
+  roles:
+  - common
+  - webtier
+

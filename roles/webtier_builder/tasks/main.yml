@@ -1,0 +1,16 @@
+---
+- name: checking out web-site sources
+  git: force=true repo=https://github.com/zolkko/blumenplace-site.git dest={{ source_dir }}
+
+- name: installing node.js modules
+  npm: path={{ source_dir }}
+
+- name: cleanup build dir
+  file: state=absent path="{{ build_dir }}"
+
+- name: building web-site
+  shell: gulp
+  args:
+    chdir: "{{ source_dir }}"
+  run_once: true
+
